@@ -177,6 +177,25 @@ app.post('/api/create-user', getAccessToken, async (req, res) => {
   }
 });
 
+app.get('/api/userById/:id', async (req, res) => {
+  try {
+    const url = `https://dev-uxkzwzq6c7k20313.us.auth0.com/api/v2/users/${req.params.id}`;
+    const accessToken = req.header('authorization');
+    const auth0Response = await axios.get(url, {
+      headers: {
+        authorization: `${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    res.json(auth0Response.data);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({ error: error , message: 'Failed to create a user' });
+  }
+});
+
 const getUserData = async (req, res, next) => {
   try {
     const accessToken = req.header('authorization').replace('Bearer ', '');
